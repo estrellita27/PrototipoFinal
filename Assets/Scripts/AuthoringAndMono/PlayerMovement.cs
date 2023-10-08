@@ -8,7 +8,12 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float movementSpeed = 5f;
     [SerializeField] float mass = 1f;
     [SerializeField] float jumpSpeed = 5f;
+    [SerializeField] float acceleration = 20f;
     [SerializeField] Transform cameraTransform;
+
+    public event Action OnBeforeMove; 
+
+    internal float movementSpeedMultiplier;
 
     CharacterController controller;
     Vector3 velocity; 
@@ -17,7 +22,8 @@ public class PlayerMovement : MonoBehaviour
     PlayerInput playerInput;
     InputAction moveAction;
     InputAction lookAction;
-    InputAction jumpAction; 
+    InputAction jumpAction;
+    InputAction sprintAction; 
 
     void Awake()
     {
@@ -26,6 +32,7 @@ public class PlayerMovement : MonoBehaviour
         moveAction = playerInput.actions["move"];
         lookAction = playerInput.actions["look"];
         jumpAction = playerInput.actions["jump"];
+        sprintAction = playerInput.actions["sprint"];
     }
 
     void Start()
@@ -46,19 +53,29 @@ public class PlayerMovement : MonoBehaviour
         velocity.y = controller.isGrounded ? -1f : velocity.y + gravity.y; 
     }
 
-    void UpdateMovement()
+    Vector3 GetMovementInput()
     {
-        //var x = Input.GetAxis("Horizontal");
-        // var y = Input.GetAxis("Vertical");
-
-        var moveInput = moveAction.ReadValue<Vector2>(); 
-
+        var moveInput = moveAction.ReadValue<Vector2>();
 
         var input = new Vector3();
-        input += cameraTransform.forward * moveInput.y; 
-        input += cameraTransform.forward * moveInput.x;
-        input += Vector3.ClampMagnitude(input, 1f);
-        
+        input += transform.forward * moveInput.y;
+        input += transform.right* moveInput.x;
+        input = Vector3.ClampMagnitude(input, 1f);
+        input *= movementSpeed * movementSpeedMultiplier;
+        return input;
+
+    }
+    void UpdateMovement()
+    {
+        movementSpeedMultiplier = 1f; 
+        OnBeforeMove?.Invoke();
+    
+       var input = GetMovementInput();
+
+        var factor = acceleration * Time.deltaTime; 
+        velocity.x = Mathf.Lerp(velocity.x, input.x, factor);
+        velocity.z = Mathf.Lerp(velocity.z, input.z, factor);
+
         var jumpInput = jumpAction.ReadValue<float>();
         if (jumpInput > 0 && controller.isGrounded)
         {
@@ -66,7 +83,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
        
-       controller.Move((input * movementSpeed + velocity) * Time.deltaTime);
+       controller.Move(velocity * Time.deltaTime);
 
 
     }
