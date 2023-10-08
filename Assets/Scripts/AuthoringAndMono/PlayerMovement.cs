@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 
 public class PlayerMovement : MonoBehaviour
@@ -11,11 +12,20 @@ public class PlayerMovement : MonoBehaviour
 
     CharacterController controller;
     Vector3 velocity; 
-    Vector2 look; 
+    Vector2 look;
+
+    PlayerInput playerInput;
+    InputAction moveAction;
+    InputAction lookAction;
+    InputAction jumpAction; 
 
     void Awake()
     {
-        controller = GetComponent<CharacterController>(); 
+        controller = GetComponent<CharacterController>();
+        playerInput = GetComponent<PlayerInput>();
+        moveAction = playerInput.actions["move"];
+        lookAction = playerInput.actions["look"];
+        jumpAction = playerInput.actions["jump"];
     }
 
     void Start()
@@ -38,15 +48,19 @@ public class PlayerMovement : MonoBehaviour
 
     void UpdateMovement()
     {
-        var x = Input.GetAxis("Horizontal");
-        var y = Input.GetAxis("Vertical");
+        //var x = Input.GetAxis("Horizontal");
+        // var y = Input.GetAxis("Vertical");
+
+        var moveInput = moveAction.ReadValue<Vector2>(); 
+
 
         var input = new Vector3();
-        input += cameraTransform.forward * y; 
-        input += cameraTransform.forward * x;
+        input += cameraTransform.forward * moveInput.y; 
+        input += cameraTransform.forward * moveInput.x;
         input += Vector3.ClampMagnitude(input, 1f);
         
-        if (Input.GetButtonDown("Jump") && controller.isGrounded)
+        var jumpInput = jumpAction.ReadValue<float>();
+        if (jumpInput > 0 && controller.isGrounded)
         {
             velocity.y += jumpSpeed; 
         }
@@ -58,8 +72,9 @@ public class PlayerMovement : MonoBehaviour
     }
     void UpdateLook()
     {
-        look.x += Input.GetAxis("Mouse X") * mouseSensitivity;
-        look.y += Input.GetAxis("Mouse Y") * mouseSensitivity;
+        var lookInput = lookAction.ReadValue<Vector2>(); 
+        look.x += lookInput.x * mouseSensitivity;
+        look.y += lookInput.y * mouseSensitivity;
 
         look.y = Mathf.Clamp(look.y, -89f, 89f);
 
