@@ -54,7 +54,7 @@ public class PlayerJumping : MonoBehaviour
 
     void OnGroundStateChange(bool isGrounded)
     {
-        if (!isGrounded) lastGroundedTime = lastGroundedTime.time; 
+        if (!isGrounded) lastGroundedTime = Time.time; 
     }
 
 }

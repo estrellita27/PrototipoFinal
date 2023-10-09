@@ -20,7 +20,7 @@ public class PlayerMovement : MonoBehaviour
     internal float movementSpeedMultiplier;
 
     CharacterController controller;
-    Vector3 velocity; 
+    internal Vector3 velocity; 
     Vector2 look;
 
     bool wasGrounded; 

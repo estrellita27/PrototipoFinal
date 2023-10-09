@@ -2,8 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-
-
+[RequireComponent(typeof(PlayerMovement))]
 public class PlayerSprinting : MonoBehaviour
 {
     [SerializeField] float speedMultiplier = 2f;
@@ -24,6 +23,11 @@ public class PlayerSprinting : MonoBehaviour
     void OnBeforeMove()
     {
         var sprintInput = sprintAction.ReadValue<float>();
-        playerMovement.movementSpeedMultiplier *= sprintInput > 0 ? speedMultiplier : 1f;
+        if (sprintInput == 0) return; 
+        var forwardMovementFactor = Mathf.Clamp01(
+            Vector3.Dot(playerMovement.transform.forward, playerMovement.velocity,normalized)
+            );
+        var multiplier = Mathf.Lerp(1f, speedMultiplier, forwardMovementFactor);
+        playerMovement.movementSpeedMultiplier *= multiplier;
     }
 }
