@@ -1,16 +1,16 @@
 using UnityEngine;
-using UnityEngine.InputSystem; 
+using UnityEngine.InputSystem;
 
 public class PlayerSprinting : MonoBehaviour
 {
     Player player;
     PlayerInput playerInput;
-    InputAction sprintAction; 
+    InputAction sprintAction;
 
-    void Awake ()
+    void Awake()
     {
-        player = GetComponent<player> ();
-        playerInput = GetComponent<playerInput> ();
-        sprintAction = player
+        player = GetComponent<player>();
+        playerInput = GetComponent<playerInput>();
+        sprintAction = player; 
     }
 }
