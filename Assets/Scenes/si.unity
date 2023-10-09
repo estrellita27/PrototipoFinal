@@ -233,6 +233,7 @@ GameObject:
   - component: {fileID: 388380775}
   - component: {fileID: 388380774}
   - component: {fileID: 388380773}
+  - component: {fileID: 388380777}
   m_Layer: 0
   m_Name: Aliens
   m_TagString: Untagged
@@ -248,9 +249,9 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 388380772}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 0.5
+  m_Radius: 0.75
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
@@ -319,6 +320,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &388380777
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 388380772}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64e0d141cc99763439f0ba648d54a629, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objetivo: {fileID: 1093142227}
+  velocidad: 5
 --- !u!1 &1093142223
 GameObject:
   m_ObjectHideFlags: 0
@@ -331,6 +346,7 @@ GameObject:
   - component: {fileID: 1093142226}
   - component: {fileID: 1093142225}
   - component: {fileID: 1093142224}
+  - component: {fileID: 1093142228}
   m_Layer: 0
   m_Name: Romanos
   m_TagString: Untagged
@@ -346,9 +362,9 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1093142223}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 0.5
+  m_Radius: 0.75
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
@@ -417,6 +433,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1093142228
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1093142223}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64e0d141cc99763439f0ba648d54a629, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objetivo: {fileID: 388380776}
+  velocidad: 10
 --- !u!1 &1508610252
 GameObject:
   m_ObjectHideFlags: 0
