@@ -6,25 +6,45 @@ using UnityEngine.InputSystem;
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] float mouseSensitivity = 3f;
-    [SerializeField] float movementSpeed = 5f;
+    [SerializeField] float walkingSpeed = 5f;
+    [SerializeField] float flyingSpeed = 10f;
     [SerializeField] float mass = 1f;
     [SerializeField] float jumpSpeed = 5f;
     [SerializeField] float acceleration = 20f;
-    [SerializeField] Transform cameraTransform;
+    public Transform cameraTransform;
 
-    public event Action OnBeforeMove; 
+    public bool IsGrounded => controller.isGrounded;
+
+    public float Height
+    {
+        get => controller.height; 
+        set => controller.height = value;
+    }
+
+    public event Action OnBeforeMove;
+    public event Action<bool> OnGroundStateChange; 
 
     internal float movementSpeedMultiplier;
 
+    public State state; 
+
+    public enum State
+    {
+        Walking, 
+        Flying
+    }
+
     CharacterController controller;
-    Vector3 velocity; 
+    internal Vector3 velocity; 
     Vector2 look;
+
+    bool wasGrounded; 
 
     PlayerInput playerInput;
     InputAction moveAction;
     InputAction lookAction;
-    InputAction jumpAction;
-    InputAction sprintAction; 
+    InputAction flyUpDownAction; 
+   
 
     void Awake()
     {
@@ -32,8 +52,8 @@ public class PlayerMovement : MonoBehaviour
         playerInput = GetComponent<PlayerInput>();
         moveAction = playerInput.actions["move"];
         lookAction = playerInput.actions["look"];
-        jumpAction = playerInput.actions["jump"];
-        sprintAction = playerInput.actions["sprint"];
+        flyUpDownAction = playerInput.actions["FlyUpDown"];
+
     }
 
     void Start()
@@ -43,9 +63,33 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-       UpdateGravity(); 
-       UpdateLook();
-       UpdateMovement(); 
+        movementSpeedMultiplier = 1f;
+        switch (state)
+        {
+            case State.Walking:
+                UpdateGround();
+                UpdateGravity();
+                UpdateLook();
+                UpdateMovement();
+                break;
+            case State.Flying:
+                UpdateMovementFlying();
+                UpdateLook();
+                break; 
+
+        }
+        
+
+        
+    }
+
+    void UpdateGround()
+    {
+        if (wasGrounded != IsGrounded)
+        {
+            OnGroundStateChange?.Invoke(IsGrounded);
+            wasGrounded = IsGrounded; 
+        }
     }
 
     void UpdateGravity()
@@ -54,40 +98,50 @@ public class PlayerMovement : MonoBehaviour
         velocity.y = controller.isGrounded ? -1f : velocity.y + gravity.y; 
     }
 
-    Vector3 GetMovementInput()
+    Vector3 GetMovementInput(float speed ,bool horizontal = true)
     {
         var moveInput = moveAction.ReadValue<Vector2>();
-
+        var flyUpDownInput = flyUpDownAction.ReadValue<float>();
         var input = new Vector3();
+        var referenceTransform = horizontal ? transform : cameraTransform; 
         input += transform.forward * moveInput.y;
         input += transform.right* moveInput.x;
+        if(!horizontal)
+        {
+            input += cameraTransform.up * flyUpDownInput; 
+        }
         input = Vector3.ClampMagnitude(input, 1f);
-        input *= movementSpeed * movementSpeedMultiplier;
+        input *= speed * movementSpeedMultiplier;
         return input;
 
     }
     void UpdateMovement()
     {
-        movementSpeedMultiplier = 1f; 
+        
         OnBeforeMove?.Invoke();
     
-       var input = GetMovementInput();
+       var input = GetMovementInput(walkingSpeed);
 
         var factor = acceleration * Time.deltaTime; 
         velocity.x = Mathf.Lerp(velocity.x, input.x, factor);
         velocity.z = Mathf.Lerp(velocity.z, input.z, factor);
 
-        var jumpInput = jumpAction.ReadValue<float>();
-        if (jumpInput > 0 && controller.isGrounded)
-        {
-            velocity.y += jumpSpeed; 
-        }
-
-       
+             
        controller.Move(velocity * Time.deltaTime);
 
 
     }
+
+    void UpdateMovementFlying()
+    {
+        var input = GetMovementInput(flyingSpeed, false);
+
+        var factor = acceleration * Time.deltaTime; 
+        velocity = Vector3.Lerp(velocity, input, factor);
+
+        controller.Move(velocity *Time.deltaTime);
+    }
+
     void UpdateLook()
     {
         var lookInput = lookAction.ReadValue<Vector2>(); 
@@ -98,6 +152,11 @@ public class PlayerMovement : MonoBehaviour
 
         cameraTransform.localRotation = Quaternion.Euler(-look.y, 0, 0);
         transform.localRotation = Quaternion.Euler(0, look.x, 0);
+    }
+
+    void OnToggleFlying()
+    {
+        state = state == State.Flying ? State.Walking : State.Flying;
     }
 
 }
