@@ -149,7 +149,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 452013524}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.8, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -219,10 +219,10 @@ GameObject:
   - component: {fileID: 600588285}
   - component: {fileID: 600588284}
   - component: {fileID: 600588283}
-  - component: {fileID: 600588282}
   - component: {fileID: 600588281}
-  - component: {fileID: 600588287}
-  - component: {fileID: 600588288}
+  - component: {fileID: 600588290}
+  - component: {fileID: 600588292}
+  - component: {fileID: 600588291}
   m_Layer: 0
   m_Name: Capsule
   m_TagString: Untagged
@@ -260,24 +260,6 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!114 &600588282
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 600588280}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a985ccfb462585e4095b509addd48e43, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mouseSensitivity: 3
-  movementSpeed: 5
-  mass: 1
-  jumpSpeed: 5
-  acceleration: 20
-  cameraTransform: {fileID: 452013525}
 --- !u!143 &600588283
 CharacterController:
   m_ObjectHideFlags: 0
@@ -362,7 +344,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &600588287
+--- !u!114 &600588290
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -371,11 +353,33 @@ MonoBehaviour:
   m_GameObject: {fileID: 600588280}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c3acd8c453baad4884941b867f012d5, type: 3}
+  m_Script: {fileID: 11500000, guid: a985ccfb462585e4095b509addd48e43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speedMultiplier: 2
---- !u!114 &600588288
+  mouseSensitivity: 3
+  walkingSpeed: 5
+  flyingSpeed: 10
+  mass: 1
+  jumpSpeed: 5
+  acceleration: 20
+  cameraTransform: {fileID: 452013525}
+  state: 0
+--- !u!114 &600588291
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 600588280}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac6c17a4e60916b49a17053ca3ca1ec3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  crouchHeight: 1
+  crouchTransitionSpeed: 10
+  crouchSpeedMultiplier: 0.5
+--- !u!114 &600588292
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -388,6 +392,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jumpSpeed: 5
+  jumpPressBufferTime: 0.05
+  jumpGroundGraceTime: 0.2
 --- !u!1 &662556917
 GameObject:
   m_ObjectHideFlags: 0
@@ -574,7 +580,7 @@ Transform:
   m_GameObject: {fileID: 1701397507}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -1, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 10, y: 10, z: 10}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}

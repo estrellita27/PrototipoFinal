@@ -390,7 +390,7 @@
                 {
                     "name": "negative",
                     "id": "7f72b90b-28ef-4fb8-b209-b610c2d6858c",
-                    "path": "<Keyboard>/space",
+                    "path": "<Keyboard>/leftCtrl",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
@@ -401,7 +401,7 @@
                 {
                     "name": "positive",
                     "id": "631330c1-16a6-49da-b4da-1f43a7b061fd",
-                    "path": "<Keyboard>/leftCtrl",
+                    "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
