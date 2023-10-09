@@ -12,23 +12,19 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float acceleration = 20f;
     [SerializeField] Transform cameraTransform;
 
-    public bool IsGrounded => controller.isGrounded;
-
-    public event Action OnBeforeMove;
-    public event Action<bool> OnGroundStateChange; 
+    public event Action OnBeforeMove; 
 
     internal float movementSpeedMultiplier;
 
     CharacterController controller;
-    internal Vector3 velocity; 
+    Vector3 velocity; 
     Vector2 look;
-
-    bool wasGrounded; 
 
     PlayerInput playerInput;
     InputAction moveAction;
     InputAction lookAction;
-    
+    InputAction jumpAction;
+    InputAction sprintAction; 
 
     void Awake()
     {
@@ -36,7 +32,8 @@ public class PlayerMovement : MonoBehaviour
         playerInput = GetComponent<PlayerInput>();
         moveAction = playerInput.actions["move"];
         lookAction = playerInput.actions["look"];
-        
+        jumpAction = playerInput.actions["jump"];
+        sprintAction = playerInput.actions["sprint"];
     }
 
     void Start()
@@ -46,20 +43,9 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-       UpdateGround(); 
        UpdateGravity(); 
        UpdateLook();
        UpdateMovement(); 
-    }
-
-    void UpdateGround()
-    {
-        if (wasGrounded != IsGrounded)
-        {
-            OnGroundStateChange?.Invoke(IsGrounded);
-            wasGrounded = IsGrounded;
-        }
-
     }
 
     void UpdateGravity()
@@ -90,8 +76,14 @@ public class PlayerMovement : MonoBehaviour
         var factor = acceleration * Time.deltaTime; 
         velocity.x = Mathf.Lerp(velocity.x, input.x, factor);
         velocity.z = Mathf.Lerp(velocity.z, input.z, factor);
-                  
-           
+
+        var jumpInput = jumpAction.ReadValue<float>();
+        if (jumpInput > 0 && controller.isGrounded)
+        {
+            velocity.y += jumpSpeed; 
+        }
+
+       
        controller.Move(velocity * Time.deltaTime);
 
 
