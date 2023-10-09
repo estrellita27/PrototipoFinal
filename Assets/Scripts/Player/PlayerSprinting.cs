@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 
-
+[RequireComponent(typeof(PlayerMovement))]
 public class PlayerSprinting : MonoBehaviour
 {
     [SerializeField] float speedMultiplier = 2f;
