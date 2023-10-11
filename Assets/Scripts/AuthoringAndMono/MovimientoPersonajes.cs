@@ -58,14 +58,4 @@ public class MovimientoPersonajes : MonoBehaviour
             gameObject.SetActive(false);
         }
     }
-
-    void OnCollisionEnter(Collision collision)
-    {
-        // Verifica si choca con el objeto objetivo
-        if (collision.transform == objetivo)
-        {
-            // Desaparece el objeto actual
-            Destroy(gameObject);
-        }
-    }
 }
