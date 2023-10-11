@@ -3,7 +3,7 @@ using Unity.Mathematics;
 
 namespace SML.Simulation
 {
-    public struct SpawnTimer : IComponentData
+    public struct RomanoSpawnTimer : IComponentData
     {
         public float Value;
         public float Interval;

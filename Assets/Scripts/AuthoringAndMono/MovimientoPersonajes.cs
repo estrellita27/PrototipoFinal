@@ -57,5 +57,10 @@ public class MovimientoPersonajes : MonoBehaviour
             // Desactiva el objeto cuando se queda sin vida
             gameObject.SetActive(false);
         }
+        else
+        {
+            // Si queda "vivo", detiene su movimiento
+            velocidad = 0f;
+        }
     }
 }
