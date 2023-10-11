@@ -1,3 +1,4 @@
+using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
@@ -7,46 +8,65 @@ namespace SML.Simulation
 {
     public partial class SpawnRomanoSystem : SystemBase
     {
-        private int2 _entitySpacing;
-        
+        private BeginInitializationEntityCommandBufferSystem _ecbSystem;
+        private const int MAX_TRIES = 16;
+        private float _camSizeSq;
+        private Transform _cameraTransform;
+
         protected override void OnStartRunning()
         {
-            var romanoSpawnData = GetSingleton<SpawnRomanoData>();
-            var gridSize = romanoSpawnData.SpawnGrid;
-            _entitySpacing = romanoSpawnData.EntitySpacing;
+            _ecbSystem = World.GetExistingSystem<BeginInitializationEntityCommandBufferSystem>();
 
-            for (int x = 0; x < gridSize.x; x++)
-            {
-                for (int y = 0; y < gridSize.y; y++)
-                {
-                    var newEntity = EntityManager.Instantiate(romanoSpawnData.EntityPrefab);
-                    
-                    var newPosition = new LocalToWorld {Value = CalculateTransform(x, y)};
+            var camCorner = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0));
+            _cameraTransform = Camera.main.transform;
+            _camSizeSq = math.distancesq(_cameraTransform.position, camCorner);
 
-                    EntityManager.SetComponentData(newEntity, newPosition);
 
-                    
-                }
-            }
         }
-
-        private float4x4 CalculateTransform(int x, int y)
-        {
-            return float4x4.Translate(new float3
-            {
-                x = x * _entitySpacing.x,
-                y = 1f,
-                z = y * _entitySpacing.y
-            });
-        }
-
         protected override void OnUpdate()
         {
+            var cameraPosition = (float3)_cameraTransform.position;
+            cameraPosition.y = 0f;
 
-            if (Input.GetKeyDown(KeyCode.P))
+            new SpawnEnemiesJob
             {
-                EntityManager.DestroyAndResetAllEntities();
-            }
+                DeltaTime = Time.DeltaTime,
+                ECB = _ecbSystem.CreateCommandBuffer(),
+                MaxTries = MAX_TRIES,
+                CamSizeSq = _camSizeSq,
+                CameraPosition = cameraPosition
+            }.Run();
+        }
+    }
+
+#pragma warning disable CS0282
+    [BurstCompile]
+    public partial struct SpawnEnemiesJob : IJobEntity
+    {
+        public float DeltaTime;
+        public EntityCommandBuffer ECB;
+        public int MaxTries;
+        public float CamSizeSq;
+        public float3 CameraPosition;
+
+        private void Execute(ref SpawnTimer spawnTimer, ref EntityRandom random, in SpawnPointReference spawnPoints,
+            in RomanoPrefab romanoPrefab)
+        {
+            spawnTimer.Value -= DeltaTime;
+            if (spawnTimer.Value > 0f) return;
+            spawnTimer.Value = spawnTimer.Interval;
+
+            var newRomano = ECB.Instantiate(romanoPrefab.Value);
+            float3 spawnPoint;
+            var numTries = 0;
+            do
+            {
+                numTries++;
+                var randomIndex = random.Value.NextInt(spawnPoints.Length);
+                spawnPoint = spawnPoints[randomIndex];
+            } while (math.distancesq(spawnPoint, CameraPosition) < CamSizeSq && numTries < MaxTries);
+            ECB.SetComponent(newRomano, new Translation { Value = spawnPoint });
         }
     }
 }
+
