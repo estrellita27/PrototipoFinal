@@ -4,5 +4,23 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/PantallaPrincipal.unity
+    guid: 209c67de981d883498fbecbfc4732c57
+  - enabled: 1
+    path: Assets/Scenes/PantallaVideo.unity
+    guid: 697d94a3e7f4b444bba498e908042799
+  - enabled: 1
+    path: Assets/Scenes/PantallaSelect.unity
+    guid: 6a6b1b70c4c78bb48ac106a03653113d
+  - enabled: 1
+    path: Assets/Scenes/PantallaAlien.unity
+    guid: 0449e2ffc6e2e4e4581157b8c4693b20
+  - enabled: 1
+    path: Assets/Scenes/PantallaRomano.unity
+    guid: 79af673292b07414fabc62ea112469c1
+  - enabled: 1
+    path: Assets/Scenes/Final.unity
+    guid: f2c31c00841a2974b80ca9612ab3df75
   m_configObjects: {}

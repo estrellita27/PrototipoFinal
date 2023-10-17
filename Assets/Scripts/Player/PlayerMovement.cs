@@ -58,7 +58,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
+     
     }
 
     void Update()
@@ -144,14 +144,17 @@ public class PlayerMovement : MonoBehaviour
 
     void UpdateLook()
     {
-        var lookInput = lookAction.ReadValue<Vector2>(); 
-        look.x += lookInput.x * mouseSensitivity;
-        look.y += lookInput.y * mouseSensitivity;
+        if(Time.timeScale == 1)
+        {   
+             var lookInput = lookAction.ReadValue<Vector2>(); 
+            look.x += lookInput.x * mouseSensitivity;
+            look.y += lookInput.y * mouseSensitivity;
 
-        look.y = Mathf.Clamp(look.y, -89f, 89f);
+            look.y = Mathf.Clamp(look.y, -89f, 89f);
 
-        cameraTransform.localRotation = Quaternion.Euler(-look.y, 0, 0);
-        transform.localRotation = Quaternion.Euler(0, look.x, 0);
+            cameraTransform.localRotation = Quaternion.Euler(-look.y, 0, 0);
+            transform.localRotation = Quaternion.Euler(0, look.x, 0);
+        }
     }
 
     void OnToggleFlying()
