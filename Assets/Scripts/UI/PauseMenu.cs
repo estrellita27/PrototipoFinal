@@ -55,7 +55,11 @@ public class PauseMenu : MonoBehaviour
 
     public void Continuar(){
         
+        estado = Estado.play;
+        playGame.SetActive(true);
         pauseMenu.SetActive(false);
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
         Time.timeScale = 1;
         
     }
@@ -66,7 +70,7 @@ public class PauseMenu : MonoBehaviour
         
     }
 
-    public void Salir(){
+    public void Salir_5(){
         
         Application.Quit();
         

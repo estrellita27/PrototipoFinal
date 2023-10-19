@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Romano
   m_EditorClassIdentifier: 
   ejercito: Romano
-  Vida: 100
-  Fuerza: 50
-  Velocidad: 90
+  Vida: 35
+  Fuerza: 0
+  Velocidad: 0
   Descripcion: Este soldado, es honorable y leal. Esta comprometido con su deber
     y esta dispuesto a luchar y morir por los suyos.
   Modelo: {fileID: 21300000, guid: da586bc7270553f49be403d3532d3d8d, type: 3}

@@ -9,11 +9,11 @@ public class PanelVideo : MonoBehaviour
         SceneManager.LoadScene("PantallaSelect");
     }
 
-    public void Logo_4(){
+    public void Logo(){
         SceneManager.LoadScene("PantallaPrincipal");
     }
 
-    public void Salir_4(){
+    public void Salir(){
         Application.Quit();
     }
 }

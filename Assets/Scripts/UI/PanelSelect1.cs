@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class PanelSelect : MonoBehaviour
+public class PanelSelect1 : MonoBehaviour
 {
 
     public void Anterior_1(){
         SceneManager.LoadScene("PantallaPrincipal");
     }
 
-    public void Romano(){
+    public void Romano_1(){
         SceneManager.LoadScene("PantallaRomano");
     }
 
-    public void Alien(){
+    public void Alien_1(){
         SceneManager.LoadScene("PantallaAlien");
     }
 
