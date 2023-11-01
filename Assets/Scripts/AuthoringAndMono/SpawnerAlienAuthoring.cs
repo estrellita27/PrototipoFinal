@@ -6,12 +6,12 @@ using Unity.Mathematics;
 using UnityEngine;
 using Random = Unity.Mathematics.Random;
 
-namespace SML.Simulation
+namespace SML.Alien
 {
-    public class SpawnerRomanoAuthoring : MonoBehaviour, IConvertGameObjectToEntity, IDeclareReferencedPrefabs
+    public class SpawnerAlienAuthoring : MonoBehaviour, IConvertGameObjectToEntity, IDeclareReferencedPrefabs
     {
         [SerializeField] private float _spawnInterval;
-        [SerializeField] private GameObject _romanoPrefab;
+        [SerializeField] private GameObject _alienPrefab;
 
        
         public void Convert(Entity spawnerEntity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
@@ -30,14 +30,14 @@ namespace SML.Simulation
             var spawnPointReference = blobBuilder.CreateBlobAssetReference<SpawnPointArray>(Allocator.Persistent);
             dstManager.AddComponentData(spawnerEntity, new SpawnPointReference { Value = spawnPointReference });
 
-            dstManager.AddComponentData(spawnerEntity, new RomanoSpawnTimer
+            dstManager.AddComponentData(spawnerEntity, new AlienSpawnTimer
             {
                 Value = 0f,
                 Interval = _spawnInterval
 
             });
-            var romanoEntityPrefab = conversionSystem.GetPrimaryEntity(_romanoPrefab);
-            dstManager.AddComponentData(spawnerEntity, new RomanoPrefab { Value = romanoEntityPrefab });
+            var alienEntityPrefab = conversionSystem.GetPrimaryEntity(_alienPrefab);
+            dstManager.AddComponentData(spawnerEntity, new AlienPrefab { Value = alienEntityPrefab });
 
             var randomSeed = (uint)System.DateTime.Now.Millisecond;
             dstManager.AddComponentData(spawnerEntity, new EntityRandom { Value = Random.CreateFromIndex(randomSeed) });
@@ -48,7 +48,7 @@ namespace SML.Simulation
         public void DeclareReferencedPrefabs(List<GameObject> referencedPrefabs)
         {
             
-            referencedPrefabs.Add(_romanoPrefab);
+            referencedPrefabs.Add(_alienPrefab);
         }
 
     }

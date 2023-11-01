@@ -4,9 +4,9 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 
-namespace SML.Simulation
+namespace SML.Alien
 {
-    public partial class SpawnRomanoSystem : SystemBase
+    public partial class SpawnAlienSystem : SystemBase
     {
         private BeginInitializationEntityCommandBufferSystem _ecbSystem;
         private const int MAX_TRIES = 16;
@@ -49,14 +49,14 @@ namespace SML.Simulation
         public float CamSizeSq;
         public float3 CameraPosition;
 
-        private void Execute(ref RomanoSpawnTimer spawnTimer, ref EntityRandom random, in SpawnPointReference spawnPoints,
-            in RomanoPrefab romanoPrefab)
+        private void Execute(ref AlienSpawnTimer spawnTimer, ref EntityRandom random, in SpawnPointReference spawnPoints,
+            in AlienPrefab alienPrefab)
         {
             spawnTimer.Value -= DeltaTime;
             if (spawnTimer.Value > 0f) return;
             spawnTimer.Value = spawnTimer.Interval;
 
-            var newRomano = ECB.Instantiate(romanoPrefab.Value);
+            var newRomano = ECB.Instantiate(alienPrefab.Value);
             float3 spawnPoint;
             var numTries = 0;
             do
